@@ -1,0 +1,26 @@
+{
+    "name": "clowdy/laravel-raven",
+    "description": "Sentry (Raven) error monitoring for Laravel with send in background",
+    "keywords": ["laravel", "sentry", "getsentry", "raven", "monitoring", "error", "logging"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pulkit Jalan",
+            "homepage": "https://github.com/pulkitjalan"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "illuminate/support": "4.*",
+        "raven/raven": "0.9.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1.0",
+        "mockery/mockery": "~0.9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Clowdy\\Raven\\": "src/"
+        }
+    }
+}
