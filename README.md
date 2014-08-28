@@ -10,56 +10,74 @@ Installation
 
 Add the package to your `composer.json` and run `composer update`.
 
-    {
-        "require": {
-            "clowdy/laravel-raven": "*"
-        }
+```js
+{
+    "require": {
+        "clowdy/laravel-raven": "*"
     }
+}
+```
 
 Add the service provider in `app/config/app.php`:
 
-    'Clowdy\Raven\RavenServiceProvider',
+```php
+'Clowdy\Raven\RavenServiceProvider',
+```
 
 Register the Raven alias:
 
-    'Raven' => 'Clowdy\Raven\Facades\Raven',
+```php
+'Raven' => 'Clowdy\Raven\Facades\Raven',
+```
 
 Configuration
 -------------
 
 Publish the included configuration file:
 
-    php artisan config:publish clowdy/laravel-raven
+```bash
+$ php artisan config:publish clowdy/laravel-raven
+```
 
 And change your Sentry DSN:
 
-    'dsn' => 'your-raven-dsn',
+```php
+'dsn' => 'your-raven-dsn',
+```
 
-This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can also be set.
-	
-	'queue' => [
-		'connection' => 'beanstalkd',
-		queue => 'errors'
-	]
+This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can be defined.
+
+```php
+'queue' => [
+	'connection' => 'beanstalkd',
+	'queue'      => 'errors'
+];
+```
 
 Usage
 -----
 
 To monitor exceptions, simply use the `Log` facade:
 
-    App::error(function(Exception $exception, $code)
-    {
-        Log::error($exception);
-    });
+```php
+App::error(function(Exception $exception, $code)
+{
+    Log::error($exception);
+});
+```
 
-You can change the logging levels by changing the level in the config
-	
-	'level' => 'error',
+You can change the logs used by changing the log level in the config
+
+```php	
+'level' => 'error',
+```
 
 ### Context informaton
 
 You can pass additional information as context like this:
 
-    Log::error('Oops, Something went wrong', [
-        'user' => ['name' => $user->name, 'email' => $user->email]
-    ]);
+```php
+Log::error('Oops, Something went wrong', [
+    'user' => ['name' => $user->name, 'email' => $user->email]
+]);
+```
