@@ -35,7 +35,7 @@ And change your Sentry DSN:
 
     'dsn' => 'your-raven-dsn',
 
-This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can be defined.
+This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can also be set.
 	
 	'queue' => [
 		'connection' => 'beanstalkd',
@@ -52,7 +52,7 @@ To monitor exceptions, simply use the `Log` facade:
         Log::error($exception);
     });
 
-You can change the logs used by changing the log level in the config
+You can change the logging levels by changing the level in the config
 	
 	'level' => 'error',
 
