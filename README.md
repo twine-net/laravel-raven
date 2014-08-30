@@ -1,6 +1,9 @@
 Laravel Raven
 =============
 
+[![Build Status](https://travis-ci.org/clowdy/laravel-raven.svg)](https://travis-ci.org/clowdy/laravel-raven)
+[![Coverage Status](https://coveralls.io/repos/clowdy/laravel-raven/badge.png)](https://coveralls.io/r/clowdy/laravel-raven)
+
 Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
 
 ![rollbar](https://www.getsentry.com/_static/getsentry/images/hero.png)
@@ -72,7 +75,7 @@ You can change the logs used by changing the log level in the config
 'level' => 'error',
 ```
 
-### Context informaton
+### Context information
 
 You can pass additional information as context like this:
 

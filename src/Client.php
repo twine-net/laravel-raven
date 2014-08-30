@@ -18,7 +18,7 @@ class Client extends Raven_Client {
     /**
      * Constructor.
      */
-    public function __construct($config = [], QueueManager $queue)
+    public function __construct($config, QueueManager $queue)
     {
         $dsn = array_get($config, 'dsn', '');
         $options = array_get($config, 'options', []);
@@ -51,7 +51,7 @@ class Client extends Raven_Client {
             $user['data'] = $session;
         }
 
-        // Add session ID
+        // Add session id
         if ( ! isset($user['id']))
         {
             $user['id'] = Session::getId();
