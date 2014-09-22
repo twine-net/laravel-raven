@@ -4,7 +4,7 @@ Laravel Raven
 [![Build Status](https://travis-ci.org/clowdy/laravel-raven.svg)](https://travis-ci.org/clowdy/laravel-raven)
 [![Coverage Status](https://coveralls.io/repos/clowdy/laravel-raven/badge.png)](https://coveralls.io/r/clowdy/laravel-raven)
 
-Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application. This package is inspired by the awesome package by [rcrowe](https://github.com/rcrowe/Raven).
+Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application. This package is inspired [rcrowe](https://github.com/rcrowe/Raven).
 
 ![rollbar](https://www.getsentry.com/_static/getsentry/images/hero.png)
 
