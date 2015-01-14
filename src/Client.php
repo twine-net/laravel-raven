@@ -80,7 +80,12 @@ class Client extends Raven_Client {
     {
         // put the job into the queue
         // Sync connection will sent directly
-        $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);
+        // if failed to add job to queue send it now
+        try {
+            $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);   
+        } catch (\Exception $e) {
+            $this->sendError($data);
+        }
     }
 
     public function sendError($data)
