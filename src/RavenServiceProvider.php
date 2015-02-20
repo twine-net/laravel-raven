@@ -1,4 +1,6 @@
-<?php namespace Clowdy\Raven;
+<?php
+
+namespace Clowdy\Raven;
 
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\RavenHandler;
@@ -12,6 +14,10 @@ class RavenServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app['Clowdy\Raven\Client'] = function ($app) {
+            return $app['log.raven'];
+        };
+
         $this->app['config']->package('clowdy/laravel-raven', realpath(__DIR__.'/config'), 'raven');
 
         if (!$this->app['config']->get('raven::enabled')) {
@@ -45,10 +51,6 @@ class RavenServiceProvider extends ServiceProvider
                 return $handler;
             }
         );
-
-        $this->app['Clowdy\Raven\Client'] = function ($app) {
-            return $app['log.raven'];
-        };
     }
 
     /**
@@ -58,7 +60,7 @@ class RavenServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('log.raven', function ($app) {
+        $this->app['log.raven'] = $this->app->share(function ($app) {
             $config = $app['config']->get('raven::config');
 
             $queue = $app['queue'];

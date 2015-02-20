@@ -1,4 +1,6 @@
-<?php namespace Clowdy\Raven;
+<?php
+
+namespace Clowdy\Raven;
 
 use Illuminate\Log\Writer;
 use Exception;

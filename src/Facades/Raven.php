@@ -1,10 +1,12 @@
-<?php namespace Clowdy\Raven\Facades;
+<?php
+
+namespace Clowdy\Raven\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Raven extends Facade {
-
-	/**
+class Raven extends Facade
+{
+    /**
      * Get the registered name of the component.
      *
      * @return string
@@ -13,5 +15,4 @@ class Raven extends Facade {
     {
         return 'log.raven';
     }
-
 }

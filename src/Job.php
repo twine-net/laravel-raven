@@ -5,6 +5,11 @@ namespace Clowdy\Raven;
 class Job
 {
     /**
+     * @var \Clowdy\Raven\Client
+     */
+    protected $raven;
+
+    /**
      * @param \Clowdy\Raven\Client $raven
      */
     public function __construct(Client $raven)

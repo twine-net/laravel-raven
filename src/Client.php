@@ -1,4 +1,6 @@
-<?php namespace Clowdy\Raven;
+<?php
+
+namespace Clowdy\Raven;
 
 use Raven_Client;
 use Illuminate\Queue\QueueManager;
@@ -26,10 +28,10 @@ class Client extends Raven_Client
     protected $env;
 
     /**
-     * @param array                              $config,
-     * @param \Illuminate\Queue\QueueManager     $queue
-     * @param \Illuminate\Session\SessionManager $session
-     * @param string                             $env
+     * @param array                                   $config,
+     * @param \Illuminate\Queue\QueueManager          $queue
+     * @param \Illuminate\Session\SessionManager|null $session
+     * @param string|null                             $env
      */
     public function __construct(array $config, QueueManager $queue, $session = null, $env = null)
     {
@@ -82,8 +84,8 @@ class Client extends Raven_Client
     public function get_default_data()
     {
         // Add additional tags
-        if (!is_null($env)) {
-            $this->tags['environment'] = $env;
+        if (!is_null($this->env)) {
+            $this->tags['environment'] = $this->env;
         }
 
         return parent::get_default_data();
