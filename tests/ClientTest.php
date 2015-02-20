@@ -59,4 +59,39 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $client->send([]);
     }
 
+    public function test_should_work_without_sessions()
+    {
+        $queue = $this->getQueueManager();
+        $env = $this->getEnv();
+
+        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, null, $env])->makePartial();
+        
+        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null);
+
+        $client->send([]);
+    }
+
+    public function test_should_work_without_env()
+    {
+        $queue = $this->getQueueManager();
+
+        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, null, null])->makePartial();
+        
+        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null);
+
+        $client->send([]);
+    }
+
+    public function test_should_send_error_directly_if_queue_fails()
+    {
+        $queue = $this->getQueueManager();
+
+        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, null, null])->makePartial();
+        
+        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null)->andThrow(new \Exception());
+        $client->shouldReceive('sendError')->once()->with([]);
+
+        $client->send([]);
+    }
+
 }

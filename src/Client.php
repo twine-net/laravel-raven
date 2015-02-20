@@ -2,7 +2,6 @@
 
 use Raven_Client;
 use Illuminate\Queue\QueueManager;
-use Illuminate\Session\SessionManager;
 
 class Client extends Raven_Client
 {
@@ -12,7 +11,7 @@ class Client extends Raven_Client
     protected $queue;
 
     /**
-     * @var \Illuminate\Session\SessionManager
+     * @var \Illuminate\Session\SessionManager|null
      */
     protected $session;
 
@@ -22,7 +21,7 @@ class Client extends Raven_Client
     protected $customQueue;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $env;
 
@@ -32,7 +31,7 @@ class Client extends Raven_Client
      * @param \Illuminate\Session\SessionManager $session
      * @param string                             $env
      */
-    public function __construct(array $config, QueueManager $queue, SessionManager $session, $env = null)
+    public function __construct(array $config, QueueManager $queue, $session = null, $env = null)
     {
         $dsn = array_get($config, 'dsn', '');
         $options = array_get($config, 'options', []);
@@ -54,24 +53,27 @@ class Client extends Raven_Client
      */
     protected function get_user_data()
     {
-        $user = $this->context->user ?: array();
-        $session = $this->session->all();
+        $user = $this->context->user ?: [];
 
-        // Add Laravel session data
-        if (isset($user['data'])) {
-            $user['data'] = array_merge($session, $user['data']);
-        } else {
-            $user['data'] = $session;
+        if (!is_null($session)) {
+            $session = $this->session->all();
+
+            // Add Laravel session data
+            if (isset($user['data'])) {
+                $user['data'] = array_merge($session, $user['data']);
+            } else {
+                $user['data'] = $session;
+            }
+
+            // Add session id
+            if (! isset($user['id'])) {
+                $user['id'] = $this->session->getId();
+            }
         }
 
-        // Add session id
-        if (! isset($user['id'])) {
-            $user['id'] = $this->session->getId();
-        }
-
-        return array(
+        return [
             'sentry.interfaces.User' => $user,
-        );
+        ];
     }
 
     /**

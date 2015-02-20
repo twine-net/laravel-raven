@@ -1,6 +1,4 @@
-# Composer
 composer.lock
 vendor
-
-# OSX
 .DS_Store
+build
