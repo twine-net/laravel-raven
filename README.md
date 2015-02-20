@@ -21,7 +21,7 @@ Add the package to your `composer.json` and run `composer update`.
 ```js
 {
     "require": {
-        "clowdy/laravel-raven": "0.2.*"
+        "clowdy/laravel-raven": "1.*"
     }
 }
 ```
