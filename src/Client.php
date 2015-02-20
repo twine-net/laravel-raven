@@ -57,7 +57,7 @@ class Client extends Raven_Client
     {
         $user = $this->context->user ?: [];
 
-        if (!is_null($session)) {
+        if (!is_null($this->session)) {
             $session = $this->session->all();
 
             // Add Laravel session data
