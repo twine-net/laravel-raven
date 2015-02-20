@@ -1,7 +1,7 @@
 Laravel Raven
 =============
 
-> Sentry (Raven) error monitoring for Laravel with send in background using queues
+> Sentry (Raven) error monitoring for Laravel 4 with send in background using queues
 
 [![Build Status](http://img.shields.io/travis/clowdy/laravel-raven.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
@@ -10,7 +10,7 @@ Laravel Raven
 [![Latest Version](http://img.shields.io/packagist/v/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 [![Total Downloads](https://img.shields.io/packagist/dt/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 
-Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
+Sentry (Raven) error monitoring for Laravel 4 with send in background using queues. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
 
 ![rollbar](https://www.getsentry.com/_static/getsentry/images/hero.png)
 
@@ -37,6 +37,10 @@ Register the Raven alias:
 ```php
 'Raven' => 'Clowdy\Raven\Facades\Raven',
 ```
+
+### Looking for a Laravel 5 compatible version?
+
+Checkout the [master branch](https://github.com/clowdy/laravel-raven/tree/master)
 
 ## Configuration
 
