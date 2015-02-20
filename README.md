@@ -1,19 +1,20 @@
 Laravel Raven
 =============
 
+> Sentry (Raven) error monitoring for Laravel with send in background using queues
 
 [![Build Status](http://img.shields.io/travis/clowdy/laravel-raven.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
-[![Coverage Status](https://img.shields.io/coveralls/clowdy/laravel-raven.svg?style=flat-square)](https://coveralls.io/r/clowdy/laravel-raven)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/code-structure/master)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
 [![Latest Version](http://img.shields.io/packagist/v/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 [![Total Downloads](https://img.shields.io/packagist/dt/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 
-Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application. This package is inspired [rcrowe](https://github.com/rcrowe/Raven).
+Sentry (Raven) error monitoring for Laravel with send in background. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
 
 ![rollbar](https://www.getsentry.com/_static/getsentry/images/hero.png)
 
-Installation
-------------
+## Installation
 
 Add the package to your `composer.json` and run `composer update`.
 
@@ -37,8 +38,7 @@ Register the Raven alias:
 'Raven' => 'Clowdy\Raven\Facades\Raven',
 ```
 
-Configuration
--------------
+## Configuration
 
 Publish the included configuration file:
 
@@ -46,7 +46,7 @@ Publish the included configuration file:
 $ php artisan config:publish clowdy/laravel-raven
 ```
 
-And change your Sentry DSN:
+Change the Sentry DSN:
 
 ```php
 'dsn' => 'your-raven-dsn',
@@ -61,8 +61,7 @@ This library uses the queue system, make sure your `config/queue.php` file is co
 ];
 ```
 
-Usage
------
+## Usage
 
 To monitor exceptions, simply use the `Log` facade:
 
@@ -88,3 +87,7 @@ Log::error('Oops, Something went wrong', [
     'user' => ['name' => $user->name, 'email' => $user->email]
 ]);
 ```
+
+## Credits
+
+This package was inspired [rcrowe/Raven](https://github.com/rcrowe/Raven).

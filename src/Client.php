@@ -2,6 +2,7 @@
 
 namespace Clowdy\Raven;
 
+use Exception;
 use Raven_Client;
 use Illuminate\Queue\QueueManager;
 
@@ -23,11 +24,6 @@ class Client extends Raven_Client
     protected $customQueue;
 
     /**
-     * @var string|null
-     */
-    protected $env;
-
-    /**
      * @param array                                   $config,
      * @param \Illuminate\Queue\QueueManager          $queue
      * @param \Illuminate\Session\SessionManager|null $session
@@ -36,15 +32,21 @@ class Client extends Raven_Client
     public function __construct(array $config, QueueManager $queue, $session = null, $env = null)
     {
         $dsn = array_get($config, 'dsn', '');
-        $options = array_get($config, 'options', []);
+
+        $options = ['tags' => ($env) ? ['environment' => $env] : []];
+        $options = array_merge($options, array_get($config, 'options', []));
 
         parent::__construct($dsn, $options);
 
         $this->queue = $queue;
         $this->session = $session;
-        $this->env = $env;
     }
 
+    /**
+     * Setter for a custom queue
+     *
+     * @return \Clowdy\Raven\Client
+     */
     public function setCustomQueue($queue)
     {
         $this->customQueue = $queue;
@@ -68,7 +70,7 @@ class Client extends Raven_Client
             }
 
             // Add session id
-            if (! isset($user['id'])) {
+            if (!isset($user['id'])) {
                 $user['id'] = $this->session->getId();
             }
         }
@@ -81,19 +83,6 @@ class Client extends Raven_Client
     /**
      * {@inheritdoc}
      */
-    public function get_default_data()
-    {
-        // Add additional tags
-        if (!is_null($this->env)) {
-            $this->tags['environment'] = $this->env;
-        }
-
-        return parent::get_default_data();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function send($data)
     {
         // put the job into the queue
@@ -101,13 +90,18 @@ class Client extends Raven_Client
         // if failed to add job to queue send it now
         try {
             $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->sendError($data);
         }
     }
 
+    /**
+     * Send the error to sentry without queue
+     *
+     * @return void
+     */
     public function sendError($data)
     {
-        return parent::send($data);
+        parent::send($data);
     }
 }
