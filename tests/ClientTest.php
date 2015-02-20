@@ -72,6 +72,26 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertNull($client->sendError([]));
     }
 
+    public function test_getting_user_data_from_context()
+    {
+        $queue = $this->getQueueManager();
+        $session = $this->getSessionManager();
+        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, $session])->makePartial();
+
+        $session->shouldReceive('all')->once()->andReturn([]);
+        $session->shouldReceive('getId')->times(0);
+
+        $client->set_user_data(1, 'user@example.com', ['data' => ['type' => 'vip']]);
+
+        $this->assertEquals($client->get_user_data(), [
+            'sentry.interfaces.User' => [
+                'id' => 1,
+                'email' => 'user@example.com',
+                'data' => ['type' => 'vip'],
+            ]
+        ]);
+    }
+
     public function test_getting_user_data_with_sessions()
     {
         $queue = $this->getQueueManager();

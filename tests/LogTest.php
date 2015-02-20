@@ -31,4 +31,26 @@ class LogTest extends PHPUnit_Framework_TestCase
             return $handler;
         });
     }
+
+    public function test_using_context_for_exceptions()
+    {
+        $monolog = Mockery::mock('Monolog\Logger')->makePartial();
+        $log = new \Clowdy\Raven\Log($monolog);
+
+        $exception = new \Exception('error');
+
+        $monolog->shouldReceive('addError')->once()->with('error', ['exception' => $exception]);
+
+        $log->error($exception);
+    }
+
+    public function test_BadMethodCallException()
+    {
+        $monolog = Mockery::mock('Monolog\Logger')->makePartial();
+        $log = new \Clowdy\Raven\Log($monolog);
+
+        $this->setExpectedException('BadMethodCallException');
+
+        $log->someRandomMethod('');
+    }
 }

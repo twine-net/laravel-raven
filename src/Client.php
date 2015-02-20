@@ -3,8 +3,8 @@
 namespace Clowdy\Raven;
 
 use Exception;
-use Raven_Client;
 use Illuminate\Queue\QueueManager;
+use Raven_Client;
 
 class Client extends Raven_Client
 {

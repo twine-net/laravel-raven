@@ -2,9 +2,9 @@
 
 namespace Clowdy\Raven;
 
-use Illuminate\Log\Writer;
-use Exception;
 use Closure;
+use Exception;
+use Illuminate\Log\Writer;
 
 /**
  * Overrides default Logger to provide extra functionality.
