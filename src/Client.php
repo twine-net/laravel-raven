@@ -27,9 +27,12 @@ class Client extends Raven_Client
     protected $env;
 
     /**
-     * Constructor.
+     * @param array                              $config,
+     * @param \Illuminate\Queue\QueueManager     $queue
+     * @param \Illuminate\Session\SessionManager $session
+     * @param string                             $env
      */
-    public function __construct($config, QueueManager $queue, SessionManager $session, $env = null)
+    public function __construct(array $config, QueueManager $queue, SessionManager $session, $env = null)
     {
         $dsn = array_get($config, 'dsn', '');
         $options = array_get($config, 'options', []);

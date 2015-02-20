@@ -67,7 +67,7 @@ class RavenServiceProvider extends ServiceProvider
                 $queue->connection($connection);
             }
 
-            $client = new Client($config, $queue);
+            $client = new Client($config, $queue, $app['session'], $app['env']);
             $client->setCustomQueue($app['config']->get('raven::queue.queue'));
 
             return $client;
