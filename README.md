@@ -1,16 +1,18 @@
-Laravel Raven
+(WIP) Laravel Raven
 =============
 
-> Sentry (Raven) error monitoring for Laravel 4 with send in background using queues
+Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0) for the Laravel 4 version
 
-[![Build Status](http://img.shields.io/travis/clowdy/laravel-raven.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
+> Sentry (Raven) error monitoring for Laravel 5 with send in background using queues
+
+[![Build Status](http://img.shields.io/travis/clowdy/laravel-raven/master.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/code-structure/master)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
 [![Latest Version](http://img.shields.io/packagist/v/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 [![Total Downloads](https://img.shields.io/packagist/dt/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 
-Sentry (Raven) error monitoring for Laravel 4 with send in background using queues. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
+Sentry (Raven) error monitoring for Laravel 5 with send in background using queues. This will add a listener to Laravel's existing log system. It makes use to Laravel's queues to push messages into the background without slowing down the application.
 
 ![rollbar](https://www.getsentry.com/_static/getsentry/images/hero.png)
 
@@ -21,12 +23,12 @@ Add the package to your `composer.json` and run `composer update`.
 ```js
 {
     "require": {
-        "clowdy/laravel-raven": "1.*"
+        "clowdy/laravel-raven": "2.*"
     }
 }
 ```
 
-Add the service provider in `app/config/app.php`:
+Add the service provider in `config/app.php`:
 
 ```php
 'Clowdy\Raven\RavenServiceProvider',
@@ -38,9 +40,9 @@ Register the Raven alias:
 'Raven' => 'Clowdy\Raven\Facades\Raven',
 ```
 
-### Looking for a Laravel 5 compatible version?
+### Looking for a Laravel 4 compatible version?
 
-Checkout the [master branch](https://github.com/clowdy/laravel-raven/tree/master)
+Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0)
 
 ## Configuration
 
