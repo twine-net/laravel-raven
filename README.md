@@ -3,9 +3,9 @@ Laravel Raven
 
 > Sentry (Raven) error monitoring for Laravel 4 with send in background using queues
 
-[![Build Status](http://img.shields.io/travis/clowdy/laravel-raven.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/code-structure/master)
+[![Build Status](http://img.shields.io/travis/clowdy/laravel-raven/1.0.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/1.0.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/clowdy/laravel-raven/1.0.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/code-structure/1.0)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
 [![Latest Version](http://img.shields.io/packagist/v/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
 [![Total Downloads](https://img.shields.io/packagist/dt/clowdy/laravel-raven.svg?style=flat-square)](https://packagist.org/packages/clowdy/laravel-raven)
