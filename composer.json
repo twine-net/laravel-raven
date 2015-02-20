@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.4",
-        "laravel/framework": "~4",
+        "illuminate/support": "~4",
+        "illuminate/queue": "~4",
         "raven/raven": "*"
     },
     "require-dev": {
