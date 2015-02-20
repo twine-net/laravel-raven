@@ -18,21 +18,23 @@ class RavenServiceProvider extends ServiceProvider
             return $app['log.raven'];
         };
 
-        $this->app['config']->package('clowdy/laravel-raven', realpath(__DIR__.'/config'), 'raven');
+        $this->publishes([
+            __DIR__.'/config/config.php' => config_path('raven.php'),
+        ], 'config');
 
-        if (!$this->app['config']->get('raven::enabled')) {
+        if (!config('raven.enabled')) {
             return;
         }
 
         $this->app['log'] = new Log($this->app['log']->getMonolog());
 
         $this->app['log']->registerHandler(
-            $this->app['config']->get('raven::level', 'error'),
+            config('raven.level', 'error'),
             function ($level) {
                 $handler = new RavenHandler($this->app['log.raven'], $level);
 
                 // Add processors
-                $processors = $this->app['config']->get('raven::monolog.processors', []);
+                $processors = config('raven.monolog.processors', []);
 
                 if (is_array($processors)) {
                     foreach ($processors as $process) {
@@ -60,17 +62,19 @@ class RavenServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/config/config.php', 'raven');
+
         $this->app['log.raven'] = $this->app->share(function ($app) {
-            $config = $app['config']->get('raven::config');
+            $config = config('raven');
 
             $queue = $app['queue'];
-            $connection = $app['config']->get('raven::queue.connection');
+            $connection = config('raven.queue.connection');
             if ($connection) {
                 $queue->connection($connection);
             }
 
-            $client = new Client($config, $queue, $app['session'], $app['env']);
-            $client->setCustomQueue($app['config']->get('raven::queue.queue'));
+            $client = new Client($config, $queue, $app['session'], $app->environment());
+            $client->setCustomQueue(config('raven.queue.queue'));
 
             return $client;
         });

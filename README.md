@@ -1,7 +1,5 @@
-(WIP) Laravel Raven
+Laravel Raven
 =============
-
-Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0) for the Laravel 4 version
 
 > Sentry (Raven) error monitoring for Laravel 5 with send in background using queues
 
@@ -49,7 +47,7 @@ Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0)
 Publish the included configuration file:
 
 ```bash
-$ php artisan config:publish clowdy/laravel-raven
+$ php artisan vendor:publish --provider="clowdy\laravel-raven\RavenServiceProvider" --tag="config"
 ```
 
 Change the Sentry DSN:
