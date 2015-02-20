@@ -10,14 +10,14 @@ use Closure;
 class Log extends Writer
 {
     /**
-	 * Dynamically handle error additions.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return mixed
-	 *
-	 * @throws \BadMethodCallException
-	 */
+     * Dynamically handle error additions.
+     *
+     * @param  string $method
+     * @param  array  $parameters
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
     public function __call($method, $parameters)
     {
         if (in_array($method, $this->levels)) {
@@ -47,15 +47,15 @@ class Log extends Writer
     }
 
     /**
-	 * Register a new Monolog handler.
-	 *
-	 * @param string   $level   Laravel log level.
-	 * @param \Closure $closure Return an instance of \Monolog\Handler\HandlerInterface.
-	 *
-	 * @throws \InvalidArgumentException Unknown log level.
-	 *
-	 * @return bool Whether handler was registered.
-	 */
+     * Register a new Monolog handler.
+     *
+     * @param string   $level   Laravel log level.
+     * @param \Closure $closure Return an instance of \Monolog\Handler\HandlerInterface.
+     *
+     * @throws \InvalidArgumentException Unknown log level.
+     *
+     * @return bool Whether handler was registered.
+     */
     public function registerHandler($level, Closure $callback)
     {
         $level   = $this->parseLevel($level);

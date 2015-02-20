@@ -1,9 +1,17 @@
-<?php namespace Clowdy\Raven;
+<?php
 
-use App;
+namespace Clowdy\Raven;
 
 class Job
 {
+    /**
+     * @param \Clowdy\Raven\Client $raven
+     */
+    public function __construct(Client $raven)
+    {
+        $this->raven = $raven;
+    }
+
     /**
      * Fire the job.
      *
@@ -11,12 +19,9 @@ class Job
      */
     public function fire($job, $data)
     {
-        // Get the Raven instance.
-        $raven = App::make('log.raven');
-
         try {
             // Send the data to Sentry.
-            $raven->sendError($data);
+            $this->raven->sendError($data);
 
             // Delete the processed job.
             $job->delete();
@@ -25,5 +30,4 @@ class Job
             $job->release(30);
         }
     }
-
 }
