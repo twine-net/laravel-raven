@@ -39,18 +39,8 @@ class LogTest extends PHPUnit_Framework_TestCase
 
         $exception = new \Exception('error');
 
-        $monolog->shouldReceive('addError')->once()->with('error', ['exception' => $exception]);
+        $monolog->shouldReceive('error')->once()->with($exception, []);
 
         $log->error($exception);
-    }
-
-    public function test_BadMethodCallException()
-    {
-        $monolog = Mockery::mock('Monolog\Logger')->makePartial();
-        $log = new \Clowdy\Raven\Log($monolog);
-
-        $this->setExpectedException('BadMethodCallException');
-
-        $log->someRandomMethod('');
     }
 }

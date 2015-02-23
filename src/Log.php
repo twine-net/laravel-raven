@@ -20,33 +20,52 @@ class Log extends Writer
      *
      * @throws \BadMethodCallException
      */
-    public function __call($method, $parameters)
-    {
-        if (in_array($method, $this->levels)) {
-            // Handle exceptions using context
-            // Provides a nice wrapper around default logging methods
-            if (count($parameters) >= 1 && is_a($parameters[0], 'Exception')) {
-                // Create context if none is passed
-                if (!isset($parameters[1])) {
-                    $parameters[1] = [];
-                }
+    // public function __call($method, $parameters)
+    // {
+    //     if (in_array($method, $this->levels)) {
+    //         // Handle exceptions using context
+    //         // Provides a nice wrapper around default logging methods
+    //         if (count($parameters) >= 1 && is_a($parameters[0], 'Exception')) {
+    //             // Create context if none is passed
+    //             if (!isset($parameters[1])) {
+    //                 $parameters[1] = [];
+    //             }
 
-                // Set the exception context
-                $parameters[1]['exception'] = $parameters[0];
+    //             // Set the exception context
+    //             $parameters[1]['exception'] = $parameters[0];
 
-                // Set message using exception
-                $parameters[0] = $parameters[0]->getMessage();
-            }
+    //             // Set message using exception
+    //             $parameters[0] = $parameters[0]->getMessage();
+    //         }
 
-            call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
+    //         call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
 
-            $method = 'add'.ucfirst($method);
+    //         $method = 'add'.ucfirst($method);
 
-            return $this->callMonolog($method, $parameters);
-        }
+    //         return $this->callMonolog($method, $parameters);
+    //     }
 
-        throw new \BadMethodCallException("Method [$method] does not exist.");
-    }
+    //     throw new \BadMethodCallException("Method [$method] does not exist.");
+    // }
+
+    // protected function writeLog($level, $message, $context)
+    // {
+    //     $this->fireLogEvent($level, $message = $this->formatMessage($message), $context);
+
+    //     if (is_a($message, 'Exception')) {
+    //         $exception = [];
+
+    //         // Set message using exception
+    //         $exception[0] = $message->getMessage();
+
+    //         // Set the exception context
+    //         $exception[1]['exception'] = $message;
+
+    //         $message = $exception;
+    //     }
+
+    //     $this->monolog->{$level}($message, $context);
+    // }
 
     /**
      * Register a new Monolog handler.
