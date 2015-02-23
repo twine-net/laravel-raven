@@ -12,42 +12,13 @@ use Illuminate\Log\Writer;
 class Log extends Writer
 {
     /**
-     * Dynamically handle error additions.
+     * Write a message to Monolog.
      *
-     * @param  string $method
-     * @param  array  $parameters
-     * @return mixed
-     *
-     * @throws \BadMethodCallException
+     * @param  string $level
+     * @param  string $message
+     * @param  array  $context
+     * @return void
      */
-    // public function __call($method, $parameters)
-    // {
-    //     if (in_array($method, $this->levels)) {
-    //         // Handle exceptions using context
-    //         // Provides a nice wrapper around default logging methods
-    //         if (count($parameters) >= 1 && is_a($parameters[0], 'Exception')) {
-    //             // Create context if none is passed
-    //             if (!isset($parameters[1])) {
-    //                 $parameters[1] = [];
-    //             }
-
-    //             // Set the exception context
-    //             $parameters[1]['exception'] = $parameters[0];
-
-    //             // Set message using exception
-    //             $parameters[0] = $parameters[0]->getMessage();
-    //         }
-
-    //         call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
-
-    //         $method = 'add'.ucfirst($method);
-
-    //         return $this->callMonolog($method, $parameters);
-    //     }
-
-    //     throw new \BadMethodCallException("Method [$method] does not exist.");
-    // }
-
     protected function writeLog($level, $message, $context)
     {
         if (is_a($message, 'Exception')) {
