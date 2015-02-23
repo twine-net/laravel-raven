@@ -39,7 +39,7 @@ class LogTest extends PHPUnit_Framework_TestCase
 
         $exception = new \Exception('error');
 
-        $monolog->shouldReceive('error')->once()->with($exception, []);
+        $monolog->shouldReceive('error')->once()->with('error', ['exception' => $exception]);
 
         $log->error($exception);
     }

@@ -48,24 +48,17 @@ class Log extends Writer
     //     throw new \BadMethodCallException("Method [$method] does not exist.");
     // }
 
-    // protected function writeLog($level, $message, $context)
-    // {
-    //     $this->fireLogEvent($level, $message = $this->formatMessage($message), $context);
+    protected function writeLog($level, $message, $context)
+    {
+        if (is_a($message, 'Exception')) {
+            // Set context exception using exception
+            $context = array_merge($context, ['exception' => $message]);
 
-    //     if (is_a($message, 'Exception')) {
-    //         $exception = [];
+            $message = $message->getMessage();
+        }
 
-    //         // Set message using exception
-    //         $exception[0] = $message->getMessage();
-
-    //         // Set the exception context
-    //         $exception[1]['exception'] = $message;
-
-    //         $message = $exception;
-    //     }
-
-    //     $this->monolog->{$level}($message, $context);
-    // }
+        parent::writeLog($level, $message, $context);
+    }
 
     /**
      * Register a new Monolog handler.
