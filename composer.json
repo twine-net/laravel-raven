@@ -11,10 +11,10 @@
     ],
     "require": {
         "php": ">=5.4",
-        "illuminate/support": "~4",
-        "illuminate/queue": "~4",
-        "illuminate/session": "~4",
-        "illuminate/log": "~4",
+        "illuminate/support": "~5",
+        "illuminate/queue": "~5",
+        "illuminate/session": "~5",
+        "illuminate/log": "~5",
         "raven/raven": "*"
     },
     "require-dev": {
