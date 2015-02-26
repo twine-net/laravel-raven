@@ -74,10 +74,10 @@ App::error(function(Exception $exception, $code)
 });
 ```
 
-You can change the logs used by changing the log level in the config
+You can change the logs used by changing the log level in the config by modifying the env var.
 
 ```php	
-'level' => 'error',
+RAVEN_LEVEL=error
 ```
 
 ### Context information
