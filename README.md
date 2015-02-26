@@ -50,19 +50,17 @@ Publish the included configuration file:
 $ php artisan vendor:publish --provider="clowdy\laravel-raven\RavenServiceProvider" --tag="config"
 ```
 
-Change the Sentry DSN:
+Change the Sentry DSN by using the `RAVEN_DSN` env variable or changing the config file:
 
 ```php
-'dsn' => 'your-raven-dsn',
+RAVEN_DSN=your-raven-dsn
 ```
 
-This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can be defined.
+This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can be defined. These can be set using the `RAVEN_QUEUE_CONNECTION` for connection and `RAVEN_QUEUE_QUEUE` for the custom queue.
 
 ```php
-'queue' => [
-	'connection' => 'beanstalkd',
-	'queue'      => 'errors'
-];
+RAVEN_QUEUE_CONNECTION=beanstalkd
+RAVEN_QUEUE_QUEUE=error
 ```
 
 ## Usage

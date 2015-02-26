@@ -10,7 +10,7 @@ return [
     | Enable raven logger or not
     |
     */
-    'enabled' => true,
+    'enabled' => env('RAVEN_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return [
     |
     */
 
-    'dsn' => '',
+    'dsn' => env('RAVEN_DSN', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ return [
     |
     */
 
-    'level' => 'error',
+    'level' => env('RAVEN_LEVEL', 'error'),
 
     /*
     |--------------------------------------------------------------------------
@@ -49,8 +49,8 @@ return [
     */
 
     'queue' => [
-        'connection' => '',
-        'queue' => ''
+        'connection' => env('RAVEN_QUEUE_CONNECTION', ''),
+        'queue' => env('RAVEN_QUEUE_QUEUE', ''),
     ],
 
     /*
