@@ -38,6 +38,18 @@ Register the Raven alias:
 'Raven' => 'Clowdy\Raven\Facades\Raven',
 ```
 
+You also need to modify `app\Exceptions\Hander.php` to extend `Clowdy\Raven\Handler` instead of `Illuminate\Foundation\Exceptions\Handler` as below:
+
+```php
+<?php namespace app\Exceptions;
+
+use Exception;
+// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Clowdy\Raven\Handler as ExceptionHandler;
+
+class Handler extends ExceptionHandler
+```
+
 ### Looking for a Laravel 4 compatible version?
 
 Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0)
@@ -68,10 +80,7 @@ RAVEN_QUEUE_QUEUE=error
 To monitor exceptions, simply use the `Log` facade:
 
 ```php
-App::error(function(Exception $exception, $code)
-{
-    Log::error($exception);
-});
+Log::error($exception);
 ```
 
 You can change the logs used by changing the log level in the config by modifying the env var.

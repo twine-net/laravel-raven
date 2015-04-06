@@ -3,13 +3,12 @@
 namespace Clowdy\Raven;
 
 use Exception;
-use Illuminate\Queue\QueueManager;
 use Raven_Client;
 
 class Client extends Raven_Client
 {
     /**
-     * @var \Illuminate\Queue\QueueManager
+     * @var \Illuminate\Queue\QueueManager|null
      */
     protected $queue;
 
@@ -25,11 +24,11 @@ class Client extends Raven_Client
 
     /**
      * @param array                                   $config,
-     * @param \Illuminate\Queue\QueueManager          $queue
+     * @param \Illuminate\Queue\QueueManager|null     $queue
      * @param \Illuminate\Session\SessionManager|null $session
      * @param string|null                             $env
      */
-    public function __construct(array $config, QueueManager $queue, $session = null, $env = null)
+    public function __construct(array $config, $queue = null, $session = null, $env = null)
     {
         $dsn = array_get($config, 'dsn', '');
 
@@ -38,18 +37,47 @@ class Client extends Raven_Client
 
         parent::__construct($dsn, $options);
 
-        $this->queue = $queue;
+        $this->setQueue($queue);
+        $this->setSession($session);
+    }
+
+    /**
+     * Setter for session manager
+     *
+     * @param  \Illuminate\Session\SessionManager|null $session
+     * @return \Clowdy\Raven\Client
+     */
+    public function setSession($session)
+    {
         $this->session = $session;
+
+        return $this;
+    }
+
+    /**
+     * Setter for queue manager
+     *
+     * @param  \Illuminate\Queue\QueueManager|null $queue
+     * @return \Clowdy\Raven\Client
+     */
+    public function setQueue($queue)
+    {
+        $this->queue = $queue;
+
+        return $this;
     }
 
     /**
      * Setter for a custom queue
      *
+     * @param  string               $customQueue
      * @return \Clowdy\Raven\Client
      */
-    public function setCustomQueue($queue)
+    public function setCustomQueue($customQueue)
     {
-        $this->customQueue = $queue;
+        $this->customQueue = $customQueue;
+
+        return $this;
     }
 
     /**
@@ -85,14 +113,23 @@ class Client extends Raven_Client
      */
     public function send($data)
     {
+        var_dump($this->queue);
+        // send error now if queue not set
+        if (is_null($this->queue)) {
+            return $this->sendError($data);
+        }
+
         // put the job into the queue
         // Sync connection will sent directly
         // if failed to add job to queue send it now
         try {
             $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);
         } catch (Exception $e) {
+            var_dump($e);
             $this->sendError($data);
         }
+
+        return;
     }
 
     /**
@@ -102,6 +139,6 @@ class Client extends Raven_Client
      */
     public function sendError($data)
     {
-        parent::send($data);
+        return parent::send($data);
     }
 }

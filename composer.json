@@ -15,7 +15,7 @@
         "illuminate/queue": "~5",
         "illuminate/session": "~5",
         "illuminate/log": "~5",
-        "raven/raven": "*"
+        "raven/raven": "0.11.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",

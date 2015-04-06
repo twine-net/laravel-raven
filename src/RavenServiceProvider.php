@@ -78,5 +78,9 @@ class RavenServiceProvider extends ServiceProvider
 
             return $client;
         });
+
+        $this->app->bind('Psr\Log\LoggerInterface', function ($app) {
+            return $app['log'];
+        });
     }
 }
