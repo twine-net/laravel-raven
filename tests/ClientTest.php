@@ -7,83 +7,85 @@ use Mockery;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
+    protected $client;
+
+    protected $queue;
+
+    protected $session;
+
+    public function setUp()
+    {
+        parent::setUp();
+ 
+        $this->client = Mockery::mock('Clowdy\Raven\Client')->makePartial();
+        $this->queue = Mockery::mock('Illuminate\Queue\QueueManager')->makePartial();
+        $this->session = Mockery::mock('Illuminate\Session\SessionManager')->makePartial();
+    }
+
     public function tearDown()
     {
         Mockery::close();
     }
 
-    public function getQueueManager()
-    {
-        return Mockery::mock('Illuminate\Queue\QueueManager')->makePartial();
-    }
-
-    public function getSessionManager()
-    {
-        return Mockery::mock('Illuminate\Session\SessionManager')->makePartial();
-    }
-
     public function test_extends_raven_client()
     {
-        $client = Mockery::mock('Clowdy\Raven\Client');
-
-        $this->assertInstanceOf('Raven_Client', $client);
+        $this->assertInstanceOf('Raven_Client', $this->client);
     }
 
     public function test_queue_data()
     {
-        $queue = $this->getQueueManager();
+        $this->client->setQueue($this->queue);
 
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue])->makePartial();
+        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null);
 
-        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null);
-
-        $client->send([]);
+        $this->client->send([]);
     }
 
     public function test_setting_custom_queue()
     {
-        $queue = $this->getQueueManager();
+        $this->client->setQueue($this->queue);
+        $this->client->setCustomQueue('errors');
 
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue])->makePartial();
-        $client->setCustomQueue('errors');
+        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], 'errors');
 
-        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], 'errors');
+        $this->client->send([]);
+    }
 
-        $client->send([]);
+    public function test_should_send_error_directly_if_queue_not_set()
+    {
+        $this->client->shouldReceive('sendError')->once()->with([]);
+
+        $this->client->send([]);
     }
 
     public function test_should_send_error_directly_if_queue_fails()
     {
-        $queue = $this->getQueueManager();
+        $this->client->setQueue($this->queue);
 
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue])->makePartial();
+        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null)->andThrow(new \Exception());
+        $this->client->shouldReceive('sendError')->once()->with([]);
 
-        $queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null)->andThrow(new \Exception());
-        $client->shouldReceive('sendError')->once()->with([]);
-
-        $client->send([]);
+        $this->client->send([]);
     }
 
     public function test_sending_error_no_server()
     {
-        $queue = $this->getQueueManager();
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue])->makePartial();
+        $this->client->setQueue($this->queue);
 
-        $this->assertNull($client->sendError([]));
+        $this->assertNull($this->client->sendError([]));
     }
 
     public function test_getting_user_data_from_context()
     {
-        $queue = $this->getQueueManager();
-        $session = $this->getSessionManager();
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, $session])->makePartial();
+        $this->client->setQueue($this->queue);
+        $this->client->setSession($this->session);
 
-        $session->shouldReceive('all')->once()->andReturn([]);
-        $session->shouldReceive('getId')->times(0);
+        $this->session->shouldReceive('all')->once()->andReturn([]);
+        $this->session->shouldReceive('getId')->times(0);
 
-        $client->set_user_data(1, 'user@example.com', ['data' => ['type' => 'vip']]);
+        $this->client->set_user_data(1, 'user@example.com', ['data' => ['type' => 'vip']]);
 
-        $this->assertEquals($client->get_user_data(), [
+        $this->assertEquals($this->client->get_user_data(), [
             'sentry.interfaces.User' => [
                 'id' => 1,
                 'email' => 'user@example.com',
@@ -94,14 +96,13 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function test_getting_user_data_with_sessions()
     {
-        $queue = $this->getQueueManager();
-        $session = $this->getSessionManager();
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue, $session])->makePartial();
+        $this->client->setQueue($this->queue);
+        $this->client->setSession($this->session);
 
-        $session->shouldReceive('all')->once()->andReturn([]);
-        $session->shouldReceive('getId')->once()->andReturn(1);
+        $this->session->shouldReceive('all')->once()->andReturn([]);
+        $this->session->shouldReceive('getId')->once()->andReturn(1);
 
-        $this->assertEquals($client->get_user_data(), [
+        $this->assertEquals($this->client->get_user_data(), [
             'sentry.interfaces.User' => [
                 'data' => [],
                 'id' => 1,
@@ -111,9 +112,8 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function test_getting_user_data_without_sessions()
     {
-        $queue = $this->getQueueManager();
-        $client = Mockery::mock('Clowdy\Raven\Client', [[], $queue])->makePartial();
+        $this->client->setQueue($this->queue);
 
-        $this->assertEquals($client->get_user_data(), ['sentry.interfaces.User' => []]);
+        $this->assertEquals($this->client->get_user_data(), ['sentry.interfaces.User' => []]);
     }
 }

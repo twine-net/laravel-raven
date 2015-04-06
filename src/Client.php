@@ -85,7 +85,10 @@ class Client extends Raven_Client
      */
     protected function get_user_data()
     {
-        $user = $this->context->user ?: [];
+        $user = [];
+        if (isset($this->context) && $this->context->user) {
+            $user = $this->context->user;
+        }
 
         if (!is_null($this->session)) {
             $session = $this->session->all();
@@ -113,7 +116,6 @@ class Client extends Raven_Client
      */
     public function send($data)
     {
-        var_dump($this->queue);
         // send error now if queue not set
         if (is_null($this->queue)) {
             return $this->sendError($data);
@@ -125,7 +127,6 @@ class Client extends Raven_Client
         try {
             $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);
         } catch (Exception $e) {
-            var_dump($e);
             $this->sendError($data);
         }
 

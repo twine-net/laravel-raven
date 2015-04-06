@@ -1,7 +1,7 @@
 Laravel Raven
 =============
 
-> Sentry (Raven) error monitoring for Laravel 5 with send in background using queues
+> Sentry (Raven) error monitoring for Laravel 4 & 5 with send in background using queues
 
 [![Build Status](http://img.shields.io/travis/clowdy/laravel-raven/master.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/clowdy/laravel-raven/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/clowdy/laravel-raven/)
