@@ -15,7 +15,7 @@
         "illuminate/queue": "~5",
         "illuminate/session": "~5",
         "illuminate/log": "~5",
-        "raven/raven": "*"
+        "raven/raven": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
@@ -25,5 +25,7 @@
         "psr-4": {
             "Clowdy\\Raven\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
