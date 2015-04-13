@@ -39,7 +39,9 @@ class RavenServiceProvider extends ServiceProvider
                 if (is_array($processors)) {
                     foreach ($processors as $process) {
                         // Get callable
-                        if (is_string($process)) {
+                        if (is_callable($process)) {
+                            $callable = $process;
+                        } else if (is_string($process)) {
                             $callable = new $process();
                         } else {
                             throw new \Exception('Raven: Invalid processor');
