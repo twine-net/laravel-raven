@@ -77,7 +77,11 @@ return [
         */
 
         'processors' => [
-            // 'Monolog\Processor\GitProcessor'
+            // Uncomment the following line to include user data from Auth
+            // 'Clowdy\Raven\Processors\UserDataProcessor',
+
+            // Use a built-in Monolog processor
+            // 'Monolog\Processor\GitProcessor',
         ],
 
     ],
