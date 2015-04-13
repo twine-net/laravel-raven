@@ -34,7 +34,7 @@ class Client extends Raven_Client
         $dsn = array_get($config, 'dsn', '');
 
         $options = ['tags' => ($env) ? ['environment' => $env] : []];
-        $options = array_merge($options, array_get($config, 'options', []));
+        $options = array_replace_recursive($options, array_get($config, 'options', []));
 
         parent::__construct($dsn, $options);
 
