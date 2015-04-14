@@ -39,7 +39,7 @@ class LogTest extends PHPUnit_Framework_TestCase
 
         $exception = new \Exception('error');
 
-        $monolog->shouldReceive('addError')->once()->with('error', ['exception' => $exception]);
+        $monolog->shouldReceive('addError')->once()->with('error', ['exception' => $exception, 'logger' => 'laravel-raven']);
 
         $log->error($exception);
     }
