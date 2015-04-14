@@ -37,6 +37,8 @@ class Log extends Writer
                 // Set message using exception
                 $parameters[0] = $parameters[0]->getMessage();
             }
+            
+            $parameters[1] = array_replace_recursive(['logger' => 'laravel-raven'], array_get($parameters, 1, []));
 
             call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
 
