@@ -27,6 +27,8 @@ class Log extends Writer
 
             $message = $message->getMessage();
         }
+        
+        $context = array_merge(['logger' => 'laravel-raven'], $context);
 
         parent::writeLog($level, $message, $context);
     }
