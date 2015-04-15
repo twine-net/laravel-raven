@@ -74,6 +74,10 @@ return [
         |
         | https://github.com/Seldaek/monolog/blob/master/README.mdown#processors
         |
+        | This list can consist of class names of processors or any callables,
+        | for example processor instances (potentially configured), closures,
+        | named functions and so on.
+        |
         */
 
         'processors' => [
