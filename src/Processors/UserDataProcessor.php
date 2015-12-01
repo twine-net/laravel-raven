@@ -60,7 +60,8 @@ class UserDataProcessor
      */
     public function __invoke(array $record)
     {
-        if ($user = Auth::user()) {
+        $data = [];
+        if ($user = $this->getUser()) {
             $data = $user->toArray();
 
             $data = array_except($data, $this->options['except']);
@@ -68,12 +69,20 @@ class UserDataProcessor
             if (! empty($this->options['only'])) {
                 $data = array_only($data, $this->options['only']);
             }
-        } else {
-            $data = ['id' => null];
         }
 
         $record['context']['user'] = array_merge($data, array_get($record, 'context.user', []));
 
         return $record;
+    }
+
+    /**
+     * Get user function.
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return Auth::user();
     }
 }

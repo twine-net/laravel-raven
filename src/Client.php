@@ -2,7 +2,6 @@
 
 namespace Clowdy\Raven;
 
-use Clowdy\Raven\Job;
 use Exception;
 use Illuminate\Queue\QueueManager;
 use Raven_Client;

@@ -43,7 +43,7 @@ class Log extends Writer
      */
     public function registerHandler($level, Closure $callback)
     {
-        $level   = $this->parseLevel($level);
+        $level = $this->parseLevel($level);
         $handler = call_user_func($callback, $level);
 
         // Add handler to Monolog

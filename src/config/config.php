@@ -78,12 +78,12 @@ return [
 
         'processors' => [
             // Uncomment the following line to include user data from Auth
-            // 'Clowdy\Raven\Processors\UserDataProcessor',
+            // Clowdy\Raven\Processors\UserDataProcessor::class,
             // or
             // new Clowdy\Raven\Processors\UserDataProcessor(['only' => ['username']]),
 
             // Use a built-in Monolog processor
-            // 'Monolog\Processor\GitProcessor'
+            // Monolog\Processor\GitProcessor::class
         ],
 
     ],
