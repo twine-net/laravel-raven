@@ -20,7 +20,6 @@ return [
     | Your project's DSN, found under 'API Keys' in your project's settings.
     |
     */
-
     'dsn' => env('RAVEN_DSN', ''),
 
     /*
@@ -34,7 +33,6 @@ return [
     |            'critical', 'alert', 'emergency'
     |
     */
-
     'level' => env('RAVEN_LEVEL', 'error'),
 
     /*
@@ -47,7 +45,6 @@ return [
     | Defaults to the default connection and queue from config/queue.php
     |
     */
-
     'queue' => [
         'connection' => env('RAVEN_QUEUE_CONNECTION', ''),
         'name' => env('RAVEN_QUEUE_NAME', ''),
@@ -61,7 +58,6 @@ return [
     | Customise the Monolog Raven handler.
     |
     */
-
     'monolog' => [
 
         /*
@@ -100,7 +96,6 @@ return [
     | Example: "name", "tags", "trace", "timeout", "exclude", "extra", ...
     |
     */
-
     'options' => [],
 
 ];

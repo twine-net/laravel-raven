@@ -56,12 +56,15 @@ Change the Sentry DSN by using the `RAVEN_DSN` env variable or changing the conf
 RAVEN_DSN=your-raven-dsn
 ```
 
-This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. Connection must exist in `config/queue.php` and a custom queue can be defined. These can be set using the `RAVEN_QUEUE_CONNECTION` for connection and `RAVEN_QUEUE_QUEUE` for the custom queue.
+This library uses the queue system, make sure your `config/queue.php` file is configured correctly. You can also specify the connection and the queue to use in the raven config. The connection and queue must exist in `config/queue.php`. These can be set using the `RAVEN_QUEUE_CONNECTION` for connection and `RAVEN_QUEUE_NAME` for the queue.
 
 ```php
-RAVEN_QUEUE_CONNECTION=beanstalkd
+RAVEN_QUEUE_CONNECTION=redis
 RAVEN_QUEUE_NAME=error
 ```
+
+**The job data can be quite large, ensure you are using a queue that can support large data sets like `redis` or `sqs`**.
+If the job fails to add into the queue, it will be sent directly to sentry, slowing down the request, so its not lost.
 
 ## Usage
 
