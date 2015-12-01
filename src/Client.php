@@ -19,6 +19,13 @@ class Client extends Raven_Client
     protected $queue;
 
     /**
+     * Stores the latest event id
+     *
+     * @var string
+     */
+    protected $eventId;
+
+    /**
      * @param array $config,
      * @param \Illuminate\Queue\QueueManager $queue
      * @param string|null $env
@@ -43,10 +50,22 @@ class Client extends Raven_Client
     }
 
     /**
+     * Get the last stored event id
+     *
+     * @return string 
+     */
+    public function getLastEventId()
+    {
+        return $this->eventId;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function send($data)
     {
+        $this->eventId = array_get($data, 'event_id');
+
         // send error now if queue not set
         if (is_null($this->queue)) {
             return $this->sendError($data);

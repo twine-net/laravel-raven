@@ -21,7 +21,7 @@ class Log extends Writer
      */
     protected function writeLog($level, $message, $context)
     {
-        if (is_a($message, 'Exception')) {
+        if ($message instanceof Exception) {
             // Set context exception using exception
             $context = array_merge($context, ['exception' => $message]);
 

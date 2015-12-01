@@ -84,6 +84,14 @@ You can change the logs used by changing the log level in the config by modifyin
 RAVEN_LEVEL=error
 ```
 
+### Event Id
+
+There is a method to get the **latest** event id so it can be used on things like the error page.
+
+```php
+Raven::getLastEventId();
+```
+
 ### Context information
 
 You can pass additional information as context like this:
