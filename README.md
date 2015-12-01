@@ -21,7 +21,7 @@ Add the package to your `composer.json` and run `composer update`.
 ```js
 {
     "require": {
-        "clowdy/laravel-raven": "2.*"
+        "clowdy/laravel-raven": "2.1.*"
     }
 }
 ```
@@ -29,25 +29,13 @@ Add the package to your `composer.json` and run `composer update`.
 Add the service provider in `config/app.php`:
 
 ```php
-'Clowdy\Raven\RavenServiceProvider',
+Clowdy\Raven\RavenServiceProvider::class,
 ```
 
 Register the Raven alias:
 
 ```php
-'Raven' => 'Clowdy\Raven\Facades\Raven',
-```
-
-You also need to modify `app\Exceptions\Hander.php` to extend `Clowdy\Raven\Handler` instead of `Illuminate\Foundation\Exceptions\Handler` as below:
-
-```php
-<?php namespace app\Exceptions;
-
-use Exception;
-// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Clowdy\Raven\Handler as ExceptionHandler;
-
-class Handler extends ExceptionHandler
+'Raven' => Clowdy\Raven\Facades\Raven::class,
 ```
 
 ### Looking for a Laravel 4 compatible version?
@@ -59,7 +47,7 @@ Checkout the [1.0 branch](https://github.com/clowdy/laravel-raven/tree/1.0)
 Publish the included configuration file:
 
 ```bash
-$ php artisan vendor:publish --provider="clowdy\laravel-raven\RavenServiceProvider" --tag="config"
+$ php artisan vendor:publish
 ```
 
 Change the Sentry DSN by using the `RAVEN_DSN` env variable or changing the config file:
@@ -72,15 +60,19 @@ This library uses the queue system, make sure your `config/queue.php` file is co
 
 ```php
 RAVEN_QUEUE_CONNECTION=beanstalkd
-RAVEN_QUEUE_QUEUE=error
+RAVEN_QUEUE_NAME=error
 ```
 
 ## Usage
 
-To monitor exceptions, simply use the `Log` facade:
+To monitor exceptions, simply use the `Log` facade or helper:
 
 ```php
 Log::error($exception);
+
+// or
+
+logger()->error($exception);
 ```
 
 You can change the logs used by changing the log level in the config by modifying the env var.

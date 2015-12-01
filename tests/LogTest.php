@@ -2,8 +2,12 @@
 
 namespace Clowdy\Raven\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Clowdy\Raven\Log;
+use Illuminate\Log\Writer;
 use Mockery;
+use Monolog\Handler\NullHandler;
+use Monolog\Logger;
+use PHPUnit_Framework_TestCase;
 
 class LogTest extends PHPUnit_Framework_TestCase
 {
@@ -14,16 +18,16 @@ class LogTest extends PHPUnit_Framework_TestCase
 
     public function test_extends_illuminate_log_writer()
     {
-        $log = Mockery::mock('Clowdy\Raven\Log');
+        $log = Mockery::mock(Log::class);
 
-        $this->assertInstanceOf('Illuminate\Log\Writer', $log);
+        $this->assertInstanceOf(Writer::class, $log);
     }
 
     public function test_register_handler()
     {
-        $monolog = Mockery::mock('Monolog\Logger')->makePartial();
-        $log = Mockery::mock('Clowdy\Raven\Log', [$monolog])->makePartial();
-        $handler = Mockery::mock('Monolog\Handler\NullHandler');
+        $monolog = Mockery::mock(Logger::class)->makePartial();
+        $log = Mockery::mock(Log::class, [$monolog])->makePartial();
+        $handler = Mockery::mock(NullHandler::class);
 
         $monolog->shouldReceive('pushHandler')->once()->with($handler);
 
@@ -34,8 +38,8 @@ class LogTest extends PHPUnit_Framework_TestCase
 
     public function test_using_context_for_exceptions()
     {
-        $monolog = Mockery::mock('Monolog\Logger')->makePartial();
-        $log = new \Clowdy\Raven\Log($monolog);
+        $monolog = Mockery::mock(Logger::class)->makePartial();
+        $log = new Log($monolog);
 
         $exception = new \Exception('error');
 

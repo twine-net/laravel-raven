@@ -14,19 +14,13 @@ class RavenServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['Clowdy\Raven\Client'] = function ($app) {
-            return $app['log.raven'];
-        };
-
         $this->publishes([
             __DIR__.'/config/config.php' => config_path('raven.php'),
         ], 'config');
 
-        if (!config('raven.enabled')) {
+        if (! config('raven.enabled')) {
             return;
         }
-
-        $this->app['log'] = new Log($this->app['log']->getMonolog());
 
         $this->app['log']->registerHandler(
             config('raven.level', 'error'),
@@ -41,7 +35,7 @@ class RavenServiceProvider extends ServiceProvider
                         // Get callable
                         if (is_callable($process)) {
                             $callable = $process;
-                        } else if (is_string($process)) {
+                        } elseif (is_string($process)) {
                             $callable = new $process();
                         } else {
                             throw new \Exception('Raven: Invalid processor');
@@ -66,23 +60,10 @@ class RavenServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/config/config.php', 'raven');
 
-        $this->app['log.raven'] = $this->app->share(function ($app) {
-            $config = config('raven');
-
-            $queue = $app['queue'];
-            $connection = config('raven.queue.connection');
-            if ($connection) {
-                $queue->connection($connection);
-            }
-
-            $client = new Client($config, $queue, $app['session'], $app->environment());
-            $client->setCustomQueue(config('raven.queue.queue'));
-
-            return $client;
+        $this->app[Client::class] = $this->app->share(function ($app) {
+            return new Client(config('raven'), $app['queue'], $app['session'], $app->environment());
         });
 
-        $this->app->bind('Psr\Log\LoggerInterface', function ($app) {
-            return $app['log'];
-        });
+        $this->app->instance('log', new Log($this->app['log']->getMonolog()));
     }
 }

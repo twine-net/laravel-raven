@@ -2,6 +2,7 @@
 
 namespace Clowdy\Raven\Facades;
 
+use Clowdy\Raven\Client;
 use Illuminate\Support\Facades\Facade;
 
 class Raven extends Facade
@@ -13,6 +14,6 @@ class Raven extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'log.raven';
+        return Client::class;
     }
 }

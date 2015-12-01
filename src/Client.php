@@ -2,113 +2,45 @@
 
 namespace Clowdy\Raven;
 
+use Clowdy\Raven\Job;
 use Exception;
+use Illuminate\Queue\QueueManager;
 use Raven_Client;
 
 class Client extends Raven_Client
 {
+    /**
+     * @var array
+     */
+    protected $config;
+
     /**
      * @var \Illuminate\Queue\QueueManager|null
      */
     protected $queue;
 
     /**
-     * @var \Illuminate\Session\SessionManager|null
+     * @param array $config,
+     * @param \Illuminate\Queue\QueueManager $queue
+     * @param string|null $env
      */
-    protected $session;
-
-    /**
-     * @var string
-     */
-    protected $customQueue;
-
-    /**
-     * @param array                                   $config,
-     * @param \Illuminate\Queue\QueueManager|null     $queue
-     * @param \Illuminate\Session\SessionManager|null $session
-     * @param string|null                             $env
-     */
-    public function __construct(array $config, $queue = null, $session = null, $env = null)
+    public function __construct(array $config, QueueManager $queue = null, $env = null)
     {
-        $dsn = array_get($config, 'dsn', '');
-
-        $options = ['tags' => ($env) ? ['environment' => $env] : []];
-        $options = array_replace_recursive($options, array_get($config, 'options', []));
-
-        parent::__construct($dsn, $options);
-
-        $this->setQueue($queue);
-        $this->setSession($session);
-    }
-
-    /**
-     * Setter for session manager
-     *
-     * @param  \Illuminate\Session\SessionManager|null $session
-     * @return \Clowdy\Raven\Client
-     */
-    public function setSession($session)
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
-    /**
-     * Setter for queue manager
-     *
-     * @param  \Illuminate\Queue\QueueManager|null $queue
-     * @return \Clowdy\Raven\Client
-     */
-    public function setQueue($queue)
-    {
+        $this->config = $config;
         $this->queue = $queue;
 
-        return $this;
-    }
+        // merge env into options if set
+        $options = array_replace_recursive(
+            [
+                'tags' => [
+                    'environment' => $env,
+                    'logger' => 'laravel-raven',
+                ],
+            ],
+            array_get($config, 'options', [])
+        );
 
-    /**
-     * Setter for a custom queue
-     *
-     * @param  string               $customQueue
-     * @return \Clowdy\Raven\Client
-     */
-    public function setCustomQueue($customQueue)
-    {
-        $this->customQueue = $customQueue;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function get_user_data()
-    {
-        $user = [];
-        if (isset($this->context) && $this->context->user) {
-            $user = $this->context->user;
-        }
-
-        if (!is_null($this->session)) {
-            $session = $this->session->all();
-
-            // Add Laravel session data
-            if (isset($user['data'])) {
-                $user['data'] = array_merge($session, $user['data']);
-            } else {
-                $user['data'] = $session;
-            }
-
-            // Add session id
-            if (!isset($user['id'])) {
-                $user['id'] = $this->session->getId();
-            }
-        }
-
-        return [
-            'sentry.interfaces.User' => $user,
-        ];
+        parent::__construct(array_get($config, 'dsn', ''), $options);
     }
 
     /**
@@ -125,16 +57,22 @@ class Client extends Raven_Client
         // Sync connection will sent directly
         // if failed to add job to queue send it now
         try {
-            $this->queue->push('Clowdy\Raven\Job', $data, $this->customQueue);
+            $this->queue
+                ->connection(array_get($this->config, 'queue.connection'))
+                ->push(
+                    Job::class,
+                    $data,
+                    array_get($this->config, 'queue.name')
+                );
         } catch (Exception $e) {
-            $this->sendError($data);
+            return $this->sendError($data);
         }
 
         return;
     }
 
     /**
-     * Send the error to sentry without queue
+     * Send the error to sentry without queue.
      *
      * @return void
      */

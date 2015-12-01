@@ -2,26 +2,14 @@
 
 namespace Clowdy\Raven\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Clowdy\Raven\Client;
+use Clowdy\Raven\Job;
+use Illuminate\Queue\QueueManager;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
-    protected $client;
-
-    protected $queue;
-
-    protected $session;
-
-    public function setUp()
-    {
-        parent::setUp();
- 
-        $this->client = Mockery::mock('Clowdy\Raven\Client')->makePartial();
-        $this->queue = Mockery::mock('Illuminate\Queue\QueueManager')->makePartial();
-        $this->session = Mockery::mock('Illuminate\Session\SessionManager')->makePartial();
-    }
-
     public function tearDown()
     {
         Mockery::close();
@@ -29,91 +17,44 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function test_extends_raven_client()
     {
-        $this->assertInstanceOf('Raven_Client', $this->client);
+        $this->assertInstanceOf('Raven_Client', new Client([]));
     }
 
     public function test_queue_data()
     {
-        $this->client->setQueue($this->queue);
+        $queue = Mockery::mock(QueueManager::class);
+        $client = new Client([], $queue);
 
-        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null);
+        $queue->shouldReceive('connection')->once()->with(null)->andReturn($queue);
+        $queue->shouldReceive('push')->once()->with(Job::class, [], null);
 
-        $this->client->send([]);
+        $client->send([]);
     }
 
     public function test_setting_custom_queue()
     {
-        $this->client->setQueue($this->queue);
-        $this->client->setCustomQueue('errors');
+        $queue = Mockery::mock(QueueManager::class);
+        $client = new Client(['queue' => ['name' => 'errors']], $queue);
 
-        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], 'errors');
+        $queue->shouldReceive('connection')->once()->with(null)->andReturn($queue);
+        $queue->shouldReceive('push')->once()->with(Job::class, [], 'errors');
 
-        $this->client->send([]);
+        $client->send([]);
     }
 
     public function test_should_send_error_directly_if_queue_not_set()
     {
-        $this->client->shouldReceive('sendError')->once()->with([]);
+        $client = Mockery::mock(Client::class)->makePartial();
 
-        $this->client->send([]);
-    }
+        $client->shouldReceive('sendError')->once()->with([]);
 
-    public function test_should_send_error_directly_if_queue_fails()
-    {
-        $this->client->setQueue($this->queue);
-
-        $this->queue->shouldReceive('push')->once()->with('Clowdy\Raven\Job', [], null)->andThrow(new \Exception());
-        $this->client->shouldReceive('sendError')->once()->with([]);
-
-        $this->client->send([]);
+        $client->send([]);
     }
 
     public function test_sending_error_no_server()
     {
-        $this->client->setQueue($this->queue);
+        $client = new Client([]);
 
-        $this->assertNull($this->client->sendError([]));
-    }
-
-    public function test_getting_user_data_from_context()
-    {
-        $this->client->setQueue($this->queue);
-        $this->client->setSession($this->session);
-
-        $this->session->shouldReceive('all')->once()->andReturn([]);
-        $this->session->shouldReceive('getId')->times(0);
-
-        $this->client->set_user_data(1, 'user@example.com', ['data' => ['type' => 'vip']]);
-
-        $this->assertEquals($this->client->get_user_data(), [
-            'sentry.interfaces.User' => [
-                'id' => 1,
-                'email' => 'user@example.com',
-                'data' => ['type' => 'vip'],
-            ]
-        ]);
-    }
-
-    public function test_getting_user_data_with_sessions()
-    {
-        $this->client->setQueue($this->queue);
-        $this->client->setSession($this->session);
-
-        $this->session->shouldReceive('all')->once()->andReturn([]);
-        $this->session->shouldReceive('getId')->once()->andReturn(1);
-
-        $this->assertEquals($this->client->get_user_data(), [
-            'sentry.interfaces.User' => [
-                'data' => [],
-                'id' => 1,
-            ]
-        ]);
-    }
-
-    public function test_getting_user_data_without_sessions()
-    {
-        $this->client->setQueue($this->queue);
-
-        $this->assertEquals($this->client->get_user_data(), ['sentry.interfaces.User' => []]);
+        $this->assertNull($client->sendError([]));
     }
 }

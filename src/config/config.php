@@ -50,7 +50,7 @@ return [
 
     'queue' => [
         'connection' => env('RAVEN_QUEUE_CONNECTION', ''),
-        'queue' => env('RAVEN_QUEUE_QUEUE', ''),
+        'name' => env('RAVEN_QUEUE_NAME', ''),
     ],
 
     /*
@@ -77,6 +77,12 @@ return [
         */
 
         'processors' => [
+            // Uncomment the following line to include user data from Auth
+            // 'Clowdy\Raven\Processors\UserDataProcessor',
+            // or
+            // new Clowdy\Raven\Processors\UserDataProcessor(['only' => ['username']]),
+
+            // Use a built-in Monolog processor
             // 'Monolog\Processor\GitProcessor'
         ],
 
@@ -95,6 +101,6 @@ return [
     |
     */
 
-    'options' => []
+    'options' => [],
 
 ];
