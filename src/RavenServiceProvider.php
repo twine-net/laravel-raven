@@ -25,7 +25,7 @@ class RavenServiceProvider extends ServiceProvider
         $this->app['log']->registerHandler(
             config('raven.level', 'error'),
             function ($level) {
-                $handler = new RavenHandler($this->app['log.raven'], $level);
+                $handler = new RavenHandler($this->app[Client::class], $level);
 
                 // Add processors
                 $processors = config('raven.monolog.processors', []);
@@ -61,7 +61,7 @@ class RavenServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config/config.php', 'raven');
 
         $this->app[Client::class] = $this->app->share(function ($app) {
-            return new Client(config('raven'), $app['queue'], $app['session'], $app->environment());
+            return new Client(config('raven'), $app['queue'], $app->environment());
         });
 
         $this->app->instance('log', new Log($this->app['log']->getMonolog()));
