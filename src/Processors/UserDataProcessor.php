@@ -25,7 +25,7 @@ class UserDataProcessor
     /**
      * @var array
      */
-    private $options = [
+    protected $options = [
         'except' => [],
         'only' => [
             'id',
