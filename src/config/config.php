@@ -68,15 +68,14 @@ return [
         | Set extra data on every log made to Sentry.
         | Monolog has a number of built-in processors which you can find here:
         |
-        | https://github.com/Seldaek/monolog/blob/master/README.mdown#processors
+        | https://github.com/Seldaek/monolog/tree/master/src/Monolog/Processor
+        |
+        | Processors can be an instance of a class, a clousure or the path to a class
         |
         */
-
         'processors' => [
             // Uncomment the following line to include user data from Auth
             // Clowdy\Raven\Processors\UserDataProcessor::class,
-            // or
-            // new Clowdy\Raven\Processors\UserDataProcessor(['only' => ['username']]),
 
             // Use a built-in Monolog processor
             // Monolog\Processor\GitProcessor::class
