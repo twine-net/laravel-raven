@@ -64,6 +64,6 @@ class RavenServiceProvider extends ServiceProvider
             return new Client(config('raven'), $app['queue'], $app->environment());
         });
 
-        $this->app->instance('log', new Log($this->app['log']->getMonolog()));
+        $this->app->instance('log', new Log($this->app['log']->getMonolog(), $this->app['log']->getEventDispatcher()));
     }
 }
