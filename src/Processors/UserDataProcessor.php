@@ -55,7 +55,7 @@ class UserDataProcessor
      * Run the processor: attach user data to a Monolog record.
      *
      * @param array $record Monolog record
-     * 
+     *
      * @return array $record
      */
     public function __invoke(array $record)
