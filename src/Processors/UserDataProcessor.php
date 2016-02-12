@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Auth;
  * The fields retrieved from `toArray` are then filtered with any options passed
  * to this processor's constructor before being attached to the error report.
  *
- * If no user is logged in, the data `['id' => null]` is still attached to the
- * error object, to differentiate a case where no data on the current user is
- * available from a case where it is known that no user is logged in.
+ * By default only the 'id' field from the user is attached; pass null or an
+ * empty array as the 'only' option to override this, or configure otherwise as
+ * you see fit.
  */
 class UserDataProcessor
 {
