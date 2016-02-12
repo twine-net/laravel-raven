@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
  *
  * The model's `toArray` method is used to get the user data. This is provided
  * by Eloquent and can be overridden to provide extra fields or to remove
- * fields. Fields can also be removed in Eloquent by populating the `$hidden`
- * property.
+ * fields. Fields can also be removed and added in Eloquent by populating the
+ * `$hidden` and `$appends` properties.
  *
  * The fields retrieved from `toArray` are then filtered with any options passed
  * to this processor's constructor before being attached to the error report.
@@ -41,8 +41,8 @@ class UserDataProcessor
      *                 include all fields (other than those removed by 'except')
      *
      * Note that rather than using these options it may be preferable in certain
-     * cases to use the User model's `$hidden` property or overriding its
-     * `toArray` method.
+     * cases to use the User model's `$hidden` and `$appends` properties, or
+     * overriding its `toArray` method.
      *
      * @param array $options
      */
