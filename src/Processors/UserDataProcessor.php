@@ -77,7 +77,19 @@ class UserDataProcessor
             }
         }
 
-        $record['context']['user'] = array_merge($data, array_get($record, 'context.user', []));
+        // Nest all but the particular keys Sentry treats specially in a 'data'
+        // substructure; see
+        // https://github.com/getsentry/sentry/blob/e7a295784f10a296ace7aa98e1b7216328feac5d/src/sentry/interfaces/user.py#L31
+        $topLevel = [
+            'id',
+            'username',
+            'email',
+            'ip_address',
+        ];
+        $userArray = array_only($data, $topLevel);
+        $userArray['data'] = array_except($data, $topLevel);
+
+        $record['context']['user'] = array_merge($userArray, array_get($record, 'context.user', []));
 
         return $record;
     }
