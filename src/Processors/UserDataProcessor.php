@@ -26,6 +26,7 @@ class UserDataProcessor
      * @var array
      */
     protected $options = [
+        'appends' => [],
         'except' => [],
         'only' => [
             'id',
@@ -36,6 +37,7 @@ class UserDataProcessor
      * Make a new UserDataProcessor.
      *
      * Options:
+     * - array 'appends': extra fields from the user to include
      * - array 'except': fields from the user not to include
      * - array 'only': the only fields from the user to include, or null to
      *                 include all fields (other than those removed by 'except')
@@ -68,6 +70,10 @@ class UserDataProcessor
 
             if (! empty($this->options['only'])) {
                 $data = array_only($data, $this->options['only']);
+            }
+
+            foreach ($this->options['appends'] as $key) {
+                $data[$key] = $user->{$key};
             }
         }
 
