@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Auth;
  *
  * The model's `toArray` method is used to get the user data. This is provided
  * by Eloquent and can be overridden to provide extra fields or to remove
- * fields. Fields can also be removed in Eloquent by populating the `$hidden`
- * property.
+ * fields. Fields can also be removed and added in Eloquent by populating the
+ * `$hidden` and `$appends` properties.
  *
  * The fields retrieved from `toArray` are then filtered with any options passed
  * to this processor's constructor before being attached to the error report.
  *
- * If no user is logged in, the data `['id' => null]` is still attached to the
- * error object, to differentiate a case where no data on the current user is
- * available from a case where it is known that no user is logged in.
+ * By default only the 'id' field from the user is attached; pass null or an
+ * empty array as the 'only' option to override this, or configure otherwise as
+ * you see fit.
  */
 class UserDataProcessor
 {
@@ -26,6 +26,7 @@ class UserDataProcessor
      * @var array
      */
     protected $options = [
+        'appends' => [],
         'except' => [],
         'only' => [
             'id',
@@ -36,13 +37,14 @@ class UserDataProcessor
      * Make a new UserDataProcessor.
      *
      * Options:
+     * - array 'appends': extra fields from the user to include
      * - array 'except': fields from the user not to include
      * - array 'only': the only fields from the user to include, or null to
      *                 include all fields (other than those removed by 'except')
      *
      * Note that rather than using these options it may be preferable in certain
-     * cases to use the User model's `$hidden` property or overriding its
-     * `toArray` method.
+     * cases to use the User model's `$hidden` and `$appends` properties, or
+     * overriding its `toArray` method.
      *
      * @param array $options
      */
@@ -55,7 +57,7 @@ class UserDataProcessor
      * Run the processor: attach user data to a Monolog record.
      *
      * @param array $record Monolog record
-     * 
+     *
      * @return array $record
      */
     public function __invoke(array $record)
@@ -69,9 +71,25 @@ class UserDataProcessor
             if (! empty($this->options['only'])) {
                 $data = array_only($data, $this->options['only']);
             }
+
+            foreach ($this->options['appends'] as $key) {
+                $data[$key] = $user->{$key};
+            }
         }
 
-        $record['context']['user'] = array_merge($data, array_get($record, 'context.user', []));
+        // Nest all but the particular keys Sentry treats specially in a 'data'
+        // substructure; see
+        // https://github.com/getsentry/sentry/blob/e7a295784f10a296ace7aa98e1b7216328feac5d/src/sentry/interfaces/user.py#L31
+        $topLevel = [
+            'id',
+            'username',
+            'email',
+            'ip_address',
+        ];
+        $userArray = array_only($data, $topLevel);
+        $userArray['data'] = array_except($data, $topLevel);
+
+        $record['context']['user'] = array_merge($userArray, array_get($record, 'context.user', []));
 
         return $record;
     }

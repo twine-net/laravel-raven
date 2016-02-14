@@ -102,6 +102,33 @@ Log::error('Oops, Something went wrong', [
 ]);
 ```
 
+User data can alternatively be added to the context of any messages sent via a processor, such as the included `UserDataProcessor`; see below.
+
+#### Included optional processors
+
+##### `UserDataProcessor`
+
+This processor attaches data about the current user to the error report.
+
+```php
+'processors' => [
+    Clowdy\Raven\Processors\UserDataProcessor::class,
+],
+```
+
+Or, to configure the `UserDataProcessor` object:
+
+```php
+'processors' => [
+    new Clowdy\Raven\Processors\UserDataProcessor([
+        'only' => ['id', 'username', 'email'], // This is ['id'] by default; pass [] or null to include all fields
+        'appends' => ['normallyHiddenProperty'],
+    ]),
+],
+```
+
+See the `UserDataProcessor` source for full details.
+
 ## Credits
 
 This package was inspired [rcrowe/Raven](https://github.com/rcrowe/Raven).
