@@ -129,6 +129,16 @@ Or, to configure the `UserDataProcessor` object:
 
 See the `UserDataProcessor` source for full details.
 
+##### `LocaleProcessor`
+
+This processor attaches to the error report the current application locale as a tag.
+
+```php
+'processors' => [
+    Clowdy\Raven\Processors\LocaleProcessor::class,
+],
+```
+
 ## Credits
 
 This package was inspired [rcrowe/Raven](https://github.com/rcrowe/Raven).
