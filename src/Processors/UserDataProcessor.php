@@ -62,7 +62,7 @@ class UserDataProcessor
      */
     public function __invoke(array $record)
     {
-        $data = [];
+        $data = ['id' => null];
         if ($user = $this->getUser()) {
             $data = $user->toArray();
 
