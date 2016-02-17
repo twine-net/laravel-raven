@@ -17,8 +17,20 @@ class LocaleProcessor
      */
     public function __invoke(array $record)
     {
-        $record['extra']['tags']['locale'] = $this->getLocale();
+        $record['extra']['tags'] = array_merge(array_get($record, 'extra.tags', []), $this->getTags());
         return $record;
+    }
+
+    /**
+     * Get the tags to be added
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return [
+            'locale' => $this->getLocale(),
+        ];
     }
 
     /**
