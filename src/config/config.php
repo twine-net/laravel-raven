@@ -92,7 +92,7 @@ return [
     | instance. For more information about the possible values check
     | out: https://github.com/getsentry/raven-php
     |
-    | Example: "name", "tags", "trace", "timeout", "exclude", "extra", ...
+    | Example: "name", "release", "tags", "trace", "timeout", "exclude", "extra", ...
     |
     */
     'options' => [],
