@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Auth;
  * By default only the 'id' field from the user is attached; pass null or an
  * empty array as the 'only' option to override this, or configure otherwise as
  * you see fit.
+ *
+ * If no user is logged in, the data `['id' => null]` is still attached to the
+ * error object, to differentiate a case where no data on the current user is
+ * available from a case where it is known that no user is logged in.
  */
 class UserDataProcessor
 {
