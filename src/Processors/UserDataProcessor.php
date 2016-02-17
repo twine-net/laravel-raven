@@ -62,6 +62,17 @@ class UserDataProcessor
      */
     public function __invoke(array $record)
     {
+        $record['context']['user'] = array_merge($this->getUserContext(), array_get($record, 'context.user', []));
+        return $record;
+    }
+
+    /**
+     * Get the user context array
+     *
+     * @return array
+     */
+    public function getUserContext()
+    {
         $data = ['id' => null];
         if ($user = $this->getUser()) {
             $data = $user->toArray();
@@ -89,9 +100,7 @@ class UserDataProcessor
         $userArray = array_only($data, $topLevel);
         $userArray['data'] = array_except($data, $topLevel);
 
-        $record['context']['user'] = array_merge($userArray, array_get($record, 'context.user', []));
-
-        return $record;
+        return $userArray;
     }
 
     /**
