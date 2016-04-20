@@ -1,6 +1,7 @@
-Laravel Raven
+Deprecated use [twineis/raven-php](https://github.com/twineis/raven-php) instead
 =============
 
+> Laravel Raven
 > Sentry (Raven) error monitoring for Laravel 4 & 5 with send in background using queues
 
 [![Build Status](http://img.shields.io/travis/clowdy/laravel-raven/master.svg?style=flat-square)](https://travis-ci.org/clowdy/laravel-raven)
