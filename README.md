@@ -1,4 +1,4 @@
-Deprecated use [twineis/raven-php](https://github.com/twineis/raven-php) instead
+Abandoned use [twineis/raven-php](https://github.com/twineis/raven-php) instead
 =============
 
 > Laravel Raven
