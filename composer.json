@@ -1,5 +1,5 @@
 {
-    "name": "clowdy/laravel-raven",
+    "name": "twine-net/laravel-raven",
     "description": "Sentry (Raven) error monitoring for Laravel with send in background",
     "keywords": ["laravel", "sentry", "getsentry", "raven", "monitoring", "error", "logging"],
     "license": "MIT",
